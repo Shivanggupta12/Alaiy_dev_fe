@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { supabase } from '@/utils/supabase'
 import { ProductProvider } from '@/context/ProductContext'
 import ProductList from '@/components/ProductList'
-import Cart from '@/components/Cart'
+import CartIcon from '@/components/CartIcon'
 
 export default function Dashboard() {
   const { user, loading } = useAuth()
@@ -27,15 +27,13 @@ export default function Dashboard() {
 
   return (
     <ProductProvider>
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gray-900">
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-7">
               <ProductList />
             </div>
             <div className="lg:col-span-1">
-              <Cart />
-            </div>
+              <CartIcon />
           </div>
         </div>
       </div>

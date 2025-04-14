@@ -19,7 +19,10 @@ export default function AuthForm() {
 
     try {
       const { data, error } = isSignUp
-        ? await supabase.auth.signUp({ email, password })
+        ? await supabase.auth.signUp({ email, password,
+          options: {
+            emailRedirectTo: 'https://alaiy-dev-fe-429e.vercel.app/signin' // <-- Customize this URL
+          } })
         : await supabase.auth.signInWithPassword({ email, password })
 
       if (error) throw error

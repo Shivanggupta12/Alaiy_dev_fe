@@ -24,8 +24,27 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
+  const signOut = async () => {
+    try {
+      setLoading(true)
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+      setUser(null)
+    } catch (error) {
+      console.error('Error signing out:', error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const value = {
+    user,
+    loading,
+    signOut
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )

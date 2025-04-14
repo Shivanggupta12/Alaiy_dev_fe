@@ -3,15 +3,27 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const ProductContext = createContext();
 
-export function ProductProvider({ children }) {
+export const useProducts = () => useContext(ProductContext);
+
+export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedCart = localStorage.getItem('cart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    }
+    return [];
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const fetchProducts = async () => {
     try {
@@ -32,7 +44,7 @@ export function ProductProvider({ children }) {
       const existingItem = prevCart.find((item) => item._id === product._id);
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.id
+          item._id === product._id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -57,23 +69,19 @@ export function ProductProvider({ children }) {
     );
   };
 
+  const value = {
+    products,
+    cart,
+    loading,
+    error,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+  };
+
   return (
-    <ProductContext.Provider
-      value={{
-        products,
-        cart,
-        loading,
-        error,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-      }}
-    >
+    <ProductContext.Provider value={value}>
       {children}
     </ProductContext.Provider>
   );
-}
-
-export function useProducts() {
-  return useContext(ProductContext);
-} 
+}; 

@@ -27,7 +27,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products');
+      const response = await fetch('https://alaiy-dev-nf9j.vercel.app/api/products');
       const result = await response.json();
       console.log(result)
       setProducts(result.data || []);

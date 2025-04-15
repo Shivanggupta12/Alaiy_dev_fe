@@ -1,11 +1,13 @@
 'use client';
 import { useEffect } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  useEffect(() => {
-    Router.push('/signin');
-  }, []);
+  const router = useRouter();
 
-  return null; // or a loading indicator
+  useEffect(() => {
+    router.push('/signin');
+  }, [router]);
+
+  return null; // or a loading spinner
 }
